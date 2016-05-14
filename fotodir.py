@@ -26,8 +26,33 @@ def JPG(endung):
    try: 
       tag = metadata['Exif.Image.DateTime']
       exif_dat=tag.raw_value
+      date, time = exif_dat.split()
+      date = date.replace(":", "-")
+      time = time.replace(":", "-")
+      filename = date + '_' + time + '_' + ifile
+      print ('EXIF: ' + ifile + '->' + filename)
    except:
       exif_dat = 'None None'
+
+#Jolla-EXIF-bugaround by date in filename!
+   if exif_dat == ('None None'):
+      try:
+         tag = metadata['Exif.Image.Model']
+         exif_dat = tag.raw_value
+         if exif_dat == ('Jolla'):
+            year = inputfile[0:4]
+            month = inputfile[4:6]
+            day = inputfile[6:8]
+            time = inputfile[9:12]
+            time = ('0' + time)
+            exif_dat = (year + '-' + month + '-' + day + ' ' + time)
+            filedat=exif_dat.replace(' ', '_')
+            print ('Jolla: ' + inputfile + '->' + filedat + '_' + inputfile)
+         else: 
+            exif_dat = 'None None'
+      except:
+         exif_dat = 'None None'
+
    date, time = exif_dat.split()
    date = date.replace(":", "-")
    time = time.replace(":", "-")
@@ -36,6 +61,7 @@ def JPG(endung):
       if not os.path.exists('UNSORTIERT'):
          os.mkdir('UNSORTIERT')
       copyfile(inputfile, 'UNSORTIERT/'+ifile)
+      print ('UNSORTIERT (Kein EXIF, kein Jolla): ' + ifile)
    else: 
       monat=date[0:7]    
       if not os.path.exists('SORTIERT'):

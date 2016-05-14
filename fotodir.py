@@ -8,7 +8,17 @@ import getopt
 from shutil import copyfile
 
 def main(argv):
- for inputfile in glob.glob('*.JPG'):
+ JPG('*.jpg')
+ JPG('*.JPG')
+ JPG('*.Jpg')
+ JPG('*.JPg')
+ JPG('*.jPg')
+ JPG('*.jpeg')
+ JPG('*.JPEG')
+ JPG('*.Jpeg')
+
+def JPG(endung):
+ for inputfile in glob.glob(endung):
    ifile = os.path.basename(inputfile)
    metadata = pyexiv2.ImageMetadata(inputfile)
    metadata.read()

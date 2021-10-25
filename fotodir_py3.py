@@ -22,6 +22,9 @@ def main(argv):
     MOV('.mov')
     MOV('.Mov')
     MOV('.MOV')
+    MOV('.mp4')
+    MOV('.Mp4')
+    MOV('.MP4')
 
 
 def MOV(endung):
@@ -41,6 +44,17 @@ def MOV(endung):
                     filename = (zeitstr + '_' + inputfile)
                 #print(zeitstr)
                 except:
+                    zeitstr='NONE'
+
+                if zeitstr=='NONE':
+                  try:
+                    metadata = subprocess.run(('exiftool ' + path + ' |grep "Media Create Date"'), shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
+                    metadata=str(metadata)
+                    zeitstr = metadata[-23:-4]
+                    zeitstr = zeitstr.replace(':', '-')
+                    zeitstr = zeitstr.replace(' ', '_')
+                    filename = (zeitstr + '_' + inputfile)
+                  except:
                     zeitstr='NONE'
 
                 if zeitstr == 'NONE':
